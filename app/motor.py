@@ -12,7 +12,9 @@ import io
 import os
 import re
 import subprocess
+import threading
 import time
+import uuid
 import wave
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -28,6 +30,11 @@ KOKORO_VOCES = {
 }
 
 _kokoro = None
+# Una síntesis a la vez: con 2 CPUs no se gana nada en paralelo, y dos peticiones
+# simultáneas podían cargar Kokoro DOS veces (311 MB cada una) con un tope de 2 GB.
+_turno = threading.Lock()
+
+FORMATOS = ("mp3", "wav")
 
 
 def _kokoro_motor():
@@ -95,7 +102,8 @@ def _limpia(texto: str) -> str:
     texto = re.sub(r"<break[^>]*/?>", " ", texto)      # <break time="0.4s" />
     texto = re.sub(r"\[[a-z ]+\]", " ", texto)          # [slow], [warmly]
     texto = re.sub(r"[*_`#]+", " ", texto)              # markdown suelto
-    return re.sub(r"[ \t]+", " ", texto).strip()
+    texto = re.sub(r"[ \t]+", " ", texto)
+    return re.sub(r" *\n *", "\n", texto).strip()        # sin espacios al borde de cada línea
 
 
 def _wav_a_mp3(wav: Path, mp3: Path) -> None:
@@ -116,6 +124,13 @@ def _parrafos(texto: str) -> list[str]:
     return trozos or [texto]
 
 
+def _nombre_base() -> str:
+    """Único aunque lleguen dos peticiones en el mismo segundo: con solo la hora,
+    la segunda sobrescribía el audio de la primera y su URL servía el equivocado.
+    Empieza por la hora para que el historial siga ordenando bien a ojo."""
+    return f"voz_{int(time.time())}_{uuid.uuid4().hex[:8]}"
+
+
 def genera(texto: str, motor: str = "kokoro", voz: str | None = None, velocidad: float = 0.92,
            formato: str = "mp3", nombre: str | None = None) -> Resultado:
     texto = _limpia(texto)
@@ -123,39 +138,48 @@ def genera(texto: str, motor: str = "kokoro", voz: str | None = None, velocidad:
         raise ValueError("No hay texto que leer")
     if len(texto) > 40000:
         raise ValueError("Texto demasiado largo (máximo 40.000 caracteres)")
+    if formato not in FORMATOS:
+        raise ValueError(f"Formato desconocido: {formato} (usa mp3 o wav)")
     velocidad = max(0.5, min(1.5, float(velocidad)))
-    OUT.mkdir(parents=True, exist_ok=True)
-    base = nombre or f"voz_{int(time.time())}"
-    wav = OUT / f"{base}.wav"
-    t0 = time.time()
 
+    # Validar la voz ANTES de tocar disco o modelos.
     if motor == "kokoro":
-        import numpy as np
-        import soundfile as sf
         voz = voz or "em_alex"
         if voz not in KOKORO_VOCES:
             raise ValueError(f"Voz desconocida para Kokoro: {voz}")
-        k = _kokoro_motor()
-        piezas, sr = [], 24000
-        for i, parrafo in enumerate(_parrafos(texto)):
-            audio, sr = k.create(parrafo, voice=voz, speed=velocidad, lang="es")
-            piezas.append(audio)
-            if i + 1 < len(_parrafos(texto)):
-                piezas.append(np.zeros(int(sr * 0.35), dtype=audio.dtype))  # pausa entre párrafos
-        sf.write(str(wav), np.concatenate(piezas), sr)
     elif motor == "piper":
         voz = voz or "es_ES-davefx-medium"
-        modelo = MODELS / "piper" / f"{voz}.onnx"
-        if not modelo.exists():
+        # Solo voces del catálogo: el nombre va a una ruta y "../x" saldría de la carpeta.
+        if voz not in piper_voces():
             raise ValueError(f"Voz desconocida para Piper: {voz}")
-        # Piper controla el ritmo con length_scale (mayor = más lento).
-        subprocess.run(
-            ["piper", "--model", str(modelo), "--output_file", str(wav),
-             "--length_scale", f"{1 / velocidad:.3f}", "--sentence_silence", "0.35"],
-            input=texto.encode(), check=True, capture_output=True,
-        )
     else:
         raise ValueError(f"Motor desconocido: {motor}")
+
+    OUT.mkdir(parents=True, exist_ok=True)
+    base = nombre or _nombre_base()
+    wav = OUT / f"{base}.wav"
+    t0 = time.time()
+
+    with _turno:
+        if motor == "kokoro":
+            import numpy as np
+            import soundfile as sf
+            k = _kokoro_motor()
+            parrafos = _parrafos(texto)
+            piezas, sr = [], 24000
+            for i, parrafo in enumerate(parrafos):
+                audio, sr = k.create(parrafo, voice=voz, speed=velocidad, lang="es")
+                piezas.append(audio)
+                if i + 1 < len(parrafos):
+                    piezas.append(np.zeros(int(sr * 0.35), dtype=audio.dtype))  # pausa entre párrafos
+            sf.write(str(wav), np.concatenate(piezas), sr)
+        else:
+            # Piper controla el ritmo con length_scale (mayor = más lento).
+            subprocess.run(
+                ["piper", "--model", str(MODELS / "piper" / f"{voz}.onnx"), "--output_file", str(wav),
+                 "--length_scale", f"{1 / velocidad:.3f}", "--sentence_silence", "0.35"],
+                input=texto.encode(), check=True, capture_output=True,
+            )
 
     duracion = _duracion(wav)
     salida = wav
