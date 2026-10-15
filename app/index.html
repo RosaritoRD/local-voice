@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f3f6fa">
+  <title>Estudio de voz · Voz local</title>
+  <style>
+    :root { --paper:#f3f6fa; --white:#fff; --ink:#172c3b; --muted:#536574; --blue:#284bbc; --blue-soft:#eaf0ff; --line:#d6dfe7; --mint:#dbede8; --error:#a52e39; --display:'Trebuchet MS',sans-serif; --body:system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'Courier New',monospace; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.5 var(--body); }
+    button,input,select,textarea { font:inherit; }
+    button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:3px solid var(--blue); outline-offset:4px; }
+    button,a { touch-action:manipulation; }
+    button { cursor:pointer; }
+    button:disabled { cursor:wait; opacity:.55; }
+    a { color:var(--blue); }
+    .shell { width:min(1180px,100% - 64px); margin:auto; }
+    header { border-bottom:1px solid var(--line); }
+    .header-inner { min-height:84px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { display:flex; align-items:center; gap:13px; }
+    .brand strong { font:700 19px var(--display); letter-spacing:2px; }
+    .brand span { display:block; color:var(--muted); font-size:11px; letter-spacing:1.1px; }
+    .signal { display:flex; align-items:center; gap:3px; height:30px; color:var(--blue); }
+    .signal i { display:block; width:4px; height:12px; background:currentColor; border-radius:4px; }
+    .signal i:nth-child(2),.signal i:nth-child(4) { height:22px; }
+    .signal i:nth-child(3) { height:30px; }
+    .language { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+    .language select { width:auto; min-height:40px; padding:6px 28px 6px 10px; background:transparent; }
+    main { padding:40px 0 110px; }
+    .intro { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:28px; }
+    h1 { margin:0 0 6px; font:700 clamp(30px,4vw,44px)/1.15 var(--display); letter-spacing:-1.5px; }
+    h2 { margin:0; font:700 20px/1.3 var(--display); }
+    p { margin:0; }
+    .muted { color:var(--muted); }
+    .service { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; white-space:nowrap; }
+    .dot { width:7px; height:7px; background:var(--muted); border-radius:50%; }
+    .service[data-ready=true] .dot { background:#28705b; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 300px; background:var(--white); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+    .script-panel { min-width:0; display:flex; flex-direction:column; }
+    .panel-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:23px 28px 16px; }
+    .panel-heading label { font-weight:650; }
+    .tag { background:var(--paper); padding:4px 9px; border-radius:6px; font:11px var(--mono); color:var(--muted); }
+    textarea { width:100%; min-height:335px; flex:1; resize:vertical; padding:4px 28px 24px; border:0; border-radius:0; color:var(--ink); background:var(--white); font-size:17px; line-height:1.85; }
+    textarea::placeholder { color:#778592; }
+    textarea:focus { outline-offset:-4px; }
+    .script-bottom { padding:16px 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); }
+    #character-count { font:12px var(--mono); white-space:nowrap; }
+    .settings { margin:0; padding:24px; min-width:0; border:0; border-left:1px solid var(--line); background:#f9fbfe; }
+    .settings h2 { font-size:16px; margin-bottom:22px; }
+    .field { margin-bottom:20px; }
+    .field label { display:block; font-size:12px; font-weight:650; margin-bottom:8px; }
+    select { width:100%; min-height:44px; border:1px solid #bdcbd7; border-radius:8px; color:var(--ink); background:var(--white); padding:8px 10px; }
+    .range-label { display:flex; justify-content:space-between; gap:10px; }
+    output { font:13px var(--mono); color:var(--blue); }
+    input[type=range] { width:100%; min-height:28px; accent-color:var(--blue); cursor:pointer; margin:0; }
+    .range-hints { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; }
+    .format-note { font-size:11px; color:var(--muted); margin-top:6px; }
+    .generate { width:100%; min-height:48px; border:0; border-radius:9px; color:var(--white); background:var(--blue); font-weight:650; display:flex; align-items:center; justify-content:center; gap:10px; }
+    .generate:hover:not(:disabled) { background:#203d99; }
+    .generate svg { width:17px; height:17px; }
+    .small-button { min-height:40px; padding:8px 12px; border:1px solid var(--line); background:var(--white); color:var(--ink); border-radius:8px; font-size:12px; }
+    .small-button:hover { border-color:var(--blue); }
+    .progress { margin-top:14px; padding:18px 22px; background:var(--blue-soft); border:1px solid #ccd9ff; border-radius:12px; display:flex; align-items:center; gap:18px; }
+    .progress .signal i { animation:pulse 1s ease-in-out infinite alternate; }
+    .progress .signal i:nth-child(even) { animation-delay:.4s; }
+    .progress strong { display:block; font-size:14px; }
+    .progress p { font-size:12px; color:var(--muted); margin-top:3px; }
+    .elapsed { font:14px var(--mono); margin-left:auto; }
+    .error { margin-top:14px; padding:16px 20px; border:1px solid #e4b2b8; background:#fff5f6; color:var(--error); border-radius:10px; overflow-wrap:anywhere; }
+    .error p { margin-bottom:8px; }
+    .result { margin-top:24px; border:1px solid var(--line); border-radius:14px; padding:24px 28px; background:var(--white); }
+    .section-top { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:20px; }
+    .result-kicker { display:block; font:11px var(--mono); text-transform:uppercase; letter-spacing:1.3px; color:var(--blue); margin-bottom:6px; }
+    .download { display:inline-flex; justify-content:center; align-items:center; min-height:40px; padding:8px 13px; font-size:12px; font-weight:650; border:1px solid var(--line); border-radius:8px; text-decoration:none; white-space:nowrap; }
+    audio { display:block; width:100%; height:42px; }
+    .metadata { display:flex; flex-wrap:wrap; gap:14px 28px; margin:18px 0 0; }
+    .metadata div { min-width:70px; }
+    dt { color:var(--muted); font-size:11px; }
+    dd { margin:3px 0 0; font:13px var(--mono); overflow-wrap:anywhere; }
+    .history { margin-top:40px; }
+    .history-title { display:flex; align-items:center; gap:10px; }
+    .history-count { background:var(--mint); padding:3px 8px; border-radius:6px; font:11px var(--mono); }
+    .history-list { display:grid; gap:10px; }
+    .history-item { display:grid; grid-template-columns:minmax(0,1fr) minmax(180px,320px) auto; align-items:center; gap:24px; border:1px solid var(--line); background:var(--white); border-radius:12px; padding:18px 20px; }
+    .file-name { font:13px var(--mono); overflow-wrap:anywhere; }
+    .file-info { color:var(--muted); font-size:11px; margin-top:5px; }
+    .empty { border:1px dashed #bdcbd7; border-radius:12px; padding:30px; text-align:center; color:var(--muted); }
+    .notice { position:fixed; bottom:0; left:0; right:0; padding:13px 20px; background:var(--mint); color:#254f43; border-top:1px solid #bfd9d1; text-align:center; font-size:12px; z-index:2; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @keyframes pulse { to { transform:scaleY(.45); } }
+    @media (max-width:800px) { .shell { width:calc(100% - 40px); } .workspace { grid-template-columns:minmax(0,1fr) 260px; } .panel-heading,.script-bottom { padding-left:20px; padding-right:20px; } textarea { padding-left:20px; padding-right:20px; } .settings { padding:22px 18px; } .history-item { grid-template-columns:minmax(0,1fr) auto; gap:14px; } .history-item audio { grid-column:1/-1; grid-row:2; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 32px); } .header-inner { min-height:72px; } .language label { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); } main { padding-top:28px; } .intro { display:block; } .intro p { max-width:31ch; font-size:14px; } .service { margin-top:14px; } .workspace { display:block; } textarea { min-height:270px; font-size:16px; } .settings { border-left:0; border-top:1px solid var(--line); padding:22px 20px; display:grid; grid-template-columns:1fr 1fr; gap:0 16px; } .settings h2,.settings .voice-field,.generate { grid-column:1/-1; } .settings .engine-field { grid-column:1/-1; } .field { margin-bottom:18px; } .result { padding:20px; } .section-top { align-items:start; } .result .section-top { flex-wrap:wrap; } .history { margin-top:30px; } .history-item { padding:16px; gap:12px; } .progress { padding:16px; gap:12px; } .progress p { max-width:27ch; } h2 { font-size:18px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; } }
+  </style>
+</head>
+<body>
+  <header><div class="shell header-inner">
+    <div class="brand"><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div><strong>Voz local</strong><span data-i18n="Voice studio">Estudio de voz</span></div></div>
+    <div class="language"><label for="language-select" data-i18n="Interface language">Idioma de la interfaz</label><select id="language-select"><option value="es">Español</option><option value="en">English</option></select></div>
+  </div></header>
+  <main class="shell">
+    <div class="intro"><div><h1 data-i18n="Give your script a voice.">Dale voz a tu guion.</h1><p class="muted" data-i18n="Write, listen and find the right pace.">Escribe, escucha y encuentra el ritmo.</p></div><div id="service" class="service" role="status"><span class="dot" aria-hidden="true"></span><span id="service-label">Conectando…</span></div></div>
+    <form id="voice-form">
+      <div class="workspace">
+        <div class="script-panel"><div class="panel-heading"><label for="script" data-i18n="Your script">Tu guion</label><span class="tag" data-i18n="TEXT → VOICE">TEXTO → VOZ</span></div>
+          <textarea id="script" name="texto" maxlength="40000" required spellcheck="true" aria-describedby="script-hint character-count" data-placeholder="Paste your script here. Separate paragraphs with a blank line to add a pause." placeholder="Pega aquí tu guion. Separa los párrafos con una línea en blanco para añadir una pausa."></textarea>
+          <div class="script-bottom"><span id="script-hint" data-i18n="A blank line adds a short pause.">Una línea en blanco añade una pausa breve.</span><span id="character-count">0 / 40.000</span></div>
+        </div>
+        <fieldset class="settings" id="settings" disabled><legend class="sr-only" data-i18n="Voice settings">Ajustes de voz</legend><h2 aria-hidden="true" data-i18n="Voice settings">Ajustes de voz</h2>
+          <div class="field engine-field"><label for="engine" data-i18n="Engine">Motor</label><select id="engine" name="motor" aria-describedby="engine-hint" required></select><p class="format-note" id="engine-hint"></p></div>
+          <div class="field voice-field"><label for="voice" data-i18n="Voice">Voz</label><select id="voice" name="voz" required></select></div>
+          <div class="field"><div class="range-label"><label for="speed" data-i18n="Speed">Velocidad</label><output id="speed-value" for="speed">0,92×</output></div><input id="speed" type="range" min="0.5" max="1.5" step="0.01" value="0.92"><div class="range-hints"><span>0,5×</span><span>1,5×</span></div></div>
+          <div class="field"><label for="format" data-i18n="Format">Formato</label><select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select><p class="format-note" data-i18n="MP3: smaller. WAV: uncompressed.">MP3: ligero. WAV: sin compresión.</p></div>
+          <button class="generate" id="generate" type="submit" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span id="generate-label" data-i18n="Generate voice">Generar voz</span></button>
+        </fieldset>
+      </div>
+    </form>
+    <div class="progress" id="progress" hidden><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div role="status"><strong data-i18n="Generating your audio…">Generando tu audio…</strong><p data-i18n="Long scripts can take several minutes. Keep this page open.">Los guiones largos pueden tardar varios minutos. Mantén esta página abierta.</p></div><span class="elapsed" id="elapsed" aria-label="Tiempo transcurrido">0:00</span></div>
+    <div class="error" id="error-box" role="alert" hidden><p id="error-message"></p><button class="small-button" id="retry-catalog" type="button" data-i18n="Reload voices" hidden>Recargar voces</button><a id="sign-in" href="/oauth2/start?rd=%2F" data-i18n="Sign in again" hidden>Volver a iniciar sesión</a></div>
+    <section class="result" id="result" aria-labelledby="result-title" hidden><div class="section-top"><div><span class="result-kicker" data-i18n="Ready to listen">Listo para escuchar</span><h2 id="result-title" data-i18n="Your audio">Tu audio</h2></div><a class="download" id="download" download data-i18n="Download audio">Descargar audio</a></div><audio id="result-audio" controls preload="metadata" aria-label="Audio generado"></audio><dl class="metadata" id="metadata"></dl></section>
+    <section class="history" aria-labelledby="history-title"><div class="section-top"><div class="history-title"><h2 id="history-title" data-i18n="Recent audio">Audios recientes</h2><span class="history-count" id="history-count">0</span></div><button class="small-button" type="button" id="refresh" data-i18n="Refresh">Actualizar</button></div><p class="empty" id="history-status" role="status">Cargando historial…</p><div id="history-list" class="history-list"></div></section>
+  </main>
+  <footer class="notice" data-i18n="Local voice — no ElevenLabs credits used">Voz local — no gasta créditos de ElevenLabs</footer>
+  <noscript><p class="error">Activa JavaScript para generar y escuchar voces. Enable JavaScript to use the voice studio.</p></noscript>
+  <script>
+  (() => {
+    'use strict';
+    // Same convention as AgentTube: English UI keys, ES/EN catalogue and a
+    // persisted agenttube_language. Script text and API data stay opaque.
+    const entries = {
+      'Voice studio':'Estudio de voz', 'Interface language':'Idioma de la interfaz',
+      'Give your script a voice.':'Dale voz a tu guion.', 'Write, listen and find the right pace.':'Escribe, escucha y encuentra el ritmo.',
+      'Your script':'Tu guion', 'TEXT → VOICE':'TEXTO → VOZ',
+      'Paste your script here. Separate paragraphs with a blank line to add a pause.':'Pega aquí tu guion. Separa los párrafos con una línea en blanco para añadir una pausa.',
+      'A blank line adds a short pause.':'Una línea en blanco añade una pausa breve.',
+      'Voice settings':'Ajustes de voz', 'Engine':'Motor', 'Voice':'Voz', 'Speed':'Velocidad', 'Format':'Formato',
+      'MP3: smaller. WAV: uncompressed.':'MP3: ligero. WAV: sin compresión.', 'Generate voice':'Generar voz', 'Generating…':'Generando…',
+      'Generating your audio…':'Generando tu audio…', 'Long scripts can take several minutes. Keep this page open.':'Los guiones largos pueden tardar varios minutos. Mantén esta página abierta.',
+      'Reload voices':'Recargar voces', 'Sign in again':'Volver a iniciar sesión', 'Ready to listen':'Listo para escuchar',
+      'Your audio':'Tu audio', 'Download audio':'Descargar audio', 'Recent audio':'Audios recientes', 'Refresh':'Actualizar',
+      'Local voice — no ElevenLabs credits used':'Voz local — no gasta créditos de ElevenLabs',
+      'Connecting…':'Conectando…', 'Voices available':'Voces disponibles', 'Voices unavailable':'Voces no disponibles',
+      'Loading history…':'Cargando historial…', 'Your audio will appear here after you generate it.':'Tus audios aparecerán aquí cuando los generes.',
+      'Could not load the history. Press Refresh to try again.':'No se pudo cargar el historial. Pulsa Actualizar para reintentar.',
+      'Could not load the voices. Reload them to try again.':'No se pudieron cargar las voces. Recárgalas para reintentar.',
+      'Could not generate the audio. Your script is still here; try again.':'No se pudo generar el audio. Tu guion sigue aquí; vuelve a intentarlo.',
+      'The connection was interrupted. Check Recent audio before generating again.':'Se interrumpió la conexión. Revisa Audios recientes antes de volver a generar.',
+      'Your session expired. Sign in again to continue.':'Tu sesión ha caducado. Vuelve a iniciar sesión para continuar.',
+      'The service returned an invalid response. Try again shortly.':'El servicio devolvió una respuesta no válida. Reintenta en unos momentos.',
+      'Enter a script of up to 40,000 characters.':'Escribe un guion de hasta 40.000 caracteres.',
+      'No voices installed':'No hay voces instaladas', 'Duration':'Duración', 'Characters':'Caracteres', 'Processing time':'Tiempo de proceso',
+      'Generated audio':'Audio generado', 'Elapsed time':'Tiempo transcurrido', 'Female':'Femenina', 'Male':'Masculina',
+      'Kokoro (more natural, slower)':'Kokoro (más natural, más lento)', 'Piper (faster, flatter)':'Piper (más rápido, algo más plano)'
+    };
+    const $ = id => document.getElementById(id);
+    let language = 'es';
+    try { const saved = localStorage.getItem('agenttube_language'); if (['es','en'].includes(saved)) language = saved; } catch (_) { /* Storage is optional. */ }
+    const state = { catalog:null, busy:false, history:[], historyStatus:'Loading history…', error:null, started:0, result:null };
+    const t = key => language === 'es' ? (entries[key] || key) : key;
+    const number = value => new Intl.NumberFormat(language === 'es' ? 'es-ES' : 'en-US').format(value);
+    const duration = value => { const seconds = Math.max(0, Math.round(Number(value) || 0)); return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2,'0')}`; };
+    function translatedNode(tag, key) { const node = document.createElement(tag); node.dataset.i18n = key; node.textContent = t(key); return node; }
+    function updateCount() { $('character-count').textContent = `${number(Array.from($('script').value).length)} / ${number(40000)}`; updateButton(); }
+    function updateSpeed() {
+      $('speed-value').textContent = `${number(Number($('speed').value))}×`;
+      const hints = document.querySelectorAll('.range-hints span'); hints[0].textContent = `${number(0.5)}×`; hints[1].textContent = `${number(1.5)}×`;
+    }
+    function updateButton() { $('generate').disabled = state.busy || !state.catalog || !$('voice').value || !$('script').value.trim(); }
+    function engineLabel(label) {
+      const source = Object.keys(entries).find(key => entries[key] === label);
+      return source ? t(source) : label;
+    }
+    function renderEngines() {
+      const chosen = $('engine').value;
+      $('engine').replaceChildren();
+      for (const [id, engine] of Object.entries(state.catalog || {})) {
+        const option = document.createElement('option'); option.value = id; option.textContent = engineLabel(engine.etiqueta || id).split(' (')[0];
+        option.disabled = !Object.keys(engine.voces || {}).length; $('engine').append(option);
+      }
+      if (state.catalog?.[chosen] && Object.keys(state.catalog[chosen].voces || {}).length) $('engine').value = chosen;
+      else { const first = [...$('engine').options].find(option => !option.disabled); if (first) $('engine').value = first.value; }
+      renderVoices();
+    }
+    function renderVoices() {
+      const chosen = $('voice').value; $('voice').replaceChildren();
+      const engine = state.catalog?.[$('engine').value];
+      $('engine-hint').textContent = engineLabel(engine?.etiqueta || '');
+      const voices = state.catalog?.[$('engine').value]?.voces || {};
+      for (const [id, voice] of Object.entries(voices)) {
+        const option = document.createElement('option'); option.value = id;
+        const gender = voice.genero === 'femenina' ? t('Female') : voice.genero === 'masculina' ? t('Male') : voice.genero;
+        option.textContent = [voice.nombre || id, gender, voice.idioma].filter(Boolean).join(' · '); $('voice').append(option);
+      }
+      if (Object.hasOwn(voices, chosen)) $('voice').value = chosen;
+      if (!$('voice').options.length) { const option = document.createElement('option'); option.value = ''; option.textContent = t('No voices installed'); $('voice').append(option); }
+      updateButton();
+    }
+    function applyLanguage() {
+      document.documentElement.lang = language; document.title = `${t('Voice studio')} · Voz local`; $('language-select').value = language;
+      document.querySelectorAll('[data-i18n]').forEach(node => { node.textContent = t(node.dataset.i18n); });
+      document.querySelectorAll('[data-placeholder]').forEach(node => { node.placeholder = t(node.dataset.placeholder); });
+      $('result-audio').setAttribute('aria-label',t('Generated audio')); $('elapsed').setAttribute('aria-label',t('Elapsed time'));
+      $('generate-label').textContent = t(state.busy ? 'Generating…' : 'Generate voice');
+      $('service-label').textContent = t(state.catalog ? 'Voices available' : state.error?.catalog ? 'Voices unavailable' : 'Connecting…');
+      if (state.catalog) renderEngines();
+      updateCount(); updateSpeed(); renderError(); renderHistoryLabels(); renderMetadata();
+    }
+    class ApiError extends Error { constructor(key) { super(key); this.key = key; } }
+    async function api(path, options = {}, timeout = 15000) {
+      const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), timeout);
+      try {
+        const response = await fetch(path, { ...options, credentials:'same-origin', redirect:'error', signal:controller.signal, headers:{ 'Accept':'application/json', ...(options.headers || {}) } });
+        if ([401,403].includes(response.status)) throw new ApiError('Your session expired. Sign in again to continue.');
+        if (!response.headers.get('content-type')?.includes('application/json')) throw new ApiError('The service returned an invalid response. Try again shortly.');
+        if (!response.ok) throw new ApiError(options.method === 'POST' ? 'Could not generate the audio. Your script is still here; try again.' : 'The service returned an invalid response. Try again shortly.');
+        const data = await response.json();
+        if (data.ok !== true) throw new ApiError('The service returned an invalid response. Try again shortly.');
+        return data;
+      } finally { clearTimeout(timer); }
+    }
+    function audioPath(value) {
+      if (typeof value !== 'string' || !/^\/api\/audio\/[a-zA-Z0-9_-]+\.(mp3|wav)$/.test(value)) throw new ApiError('The service returned an invalid response. Try again shortly.');
+      return value;
+    }
+    function renderError() {
+      $('error-box').hidden = !state.error;
+      if (!state.error) return;
+      $('error-message').textContent = t(state.error.key); $('retry-catalog').hidden = !state.error.catalog;
+      $('sign-in').hidden = !state.error.key.includes('session expired');
+    }
+    async function loadCatalog() {
+      $('retry-catalog').disabled = true;
+      try {
+        const data = await api('/api/voces');
+        if (!data.catalogo || typeof data.catalogo !== 'object' || !Object.values(data.catalogo).some(engine => engine && Object.keys(engine.voces || {}).length)) throw new Error('empty catalog');
+        state.catalog = data.catalogo; state.error = null; $('settings').disabled = state.busy; $('service').dataset.ready = 'true'; renderEngines();
+      } catch (error) { state.catalog = null; $('settings').disabled = true; $('service').dataset.ready = 'false'; state.error = { key:error.key || 'Could not load the voices. Reload them to try again.', catalog:true }; }
+      finally { $('retry-catalog').disabled = false; applyLanguage(); }
+    }
+    function renderMetadata() {
+      if (!state.result) return;
+      const r = state.result;
+      const pairs = [['Duration',duration(r.duracion_s)], ['Characters',number(r.caracteres)], ['Processing time',`${number(r.segundos_de_proceso)} s`], ['Voice',r.voz], ['Engine',r.motor], ['Speed',`${number(r.velocidad)}×`], ['Format',r.formato.toUpperCase()]];
+      $('metadata').replaceChildren(...pairs.map(([label,value]) => { const div = document.createElement('div'); const dt = translatedNode('dt',label); const dd = document.createElement('dd'); dd.textContent = value; div.append(dt,dd); return div; }));
+    }
+    function renderResult(r) {
+      const url = audioPath(r.url);
+      if (!['duracion_s','caracteres','segundos_de_proceso','velocidad'].every(key => typeof r[key] === 'number' && Number.isFinite(r[key]) && r[key] >= 0) || !['mp3','wav'].includes(r.formato) || !r.voz || !r.motor) throw new ApiError('The service returned an invalid response. Try again shortly.');
+      state.result = r; $('result-audio').src = url; $('download').href = url; $('download').download = url.split('/').pop(); $('result').hidden = false; renderMetadata();
+    }
+    function renderHistoryLabels() {
+      $('history-status').textContent = t(state.historyStatus);
+      document.querySelectorAll('[data-file-index]').forEach(node => {
+        const file = state.history[Number(node.dataset.fileIndex)];
+        node.textContent = `${new Intl.DateTimeFormat(language === 'es' ? 'es-ES' : 'en-US',{dateStyle:'medium',timeStyle:'short'}).format(new Date(file.cuando * 1000))} · ${number(file.kb)} KB`;
+      });
+    }
+    async function loadHistory() {
+      if ($('refresh').disabled) return;
+      $('refresh').disabled = true;
+      try {
+        const data = await api('/api/historial');
+        if (!Array.isArray(data.archivos)) throw new Error('invalid history');
+        const files = data.archivos.map(file => { audioPath(file.url); if (typeof file.archivo !== 'string' || !Number.isFinite(file.cuando) || !Number.isFinite(file.kb)) throw new Error('invalid history'); return file; });
+        state.history = files; $('history-list').replaceChildren(); $('history-count').textContent = number(files.length);
+        files.forEach((file,index) => {
+          const item = document.createElement('article'); item.className = 'history-item';
+          const info = document.createElement('div'); const name = document.createElement('p'); name.className = 'file-name'; name.textContent = file.archivo;
+          const date = document.createElement('p'); date.className = 'file-info'; date.dataset.fileIndex = index; info.append(name,date);
+          const audio = document.createElement('audio'); audio.controls = true; audio.preload = 'none'; audio.src = file.url; audio.setAttribute('aria-label',file.archivo);
+          const link = translatedNode('a','Download audio'); link.className = 'download'; link.href = file.url; link.download = file.archivo;
+          item.append(info,audio,link); $('history-list').append(item);
+        });
+        state.historyStatus = 'Your audio will appear here after you generate it.'; $('history-status').hidden = files.length > 0;
+      } catch (_) { state.historyStatus = 'Could not load the history. Press Refresh to try again.'; $('history-status').hidden = false; }
+      finally { $('refresh').disabled = false; renderHistoryLabels(); }
+    }
+    $('voice-form').addEventListener('submit',async event => {
+      event.preventDefault(); if (state.busy || !state.catalog || !$('voice').value) return;
+      const text = $('script').value;
+      if (!text.trim() || Array.from(text).length > 40000) { state.error = {key:'Enter a script of up to 40,000 characters.'}; renderError(); return; }
+      state.busy = true; state.started = Date.now(); state.error = null; $('settings').disabled = true; $('script').readOnly = true; $('progress').hidden = false;
+      $('voice-form').setAttribute('aria-busy','true'); $('elapsed').textContent = '0:00'; applyLanguage();
+      const timer = setInterval(() => { $('elapsed').textContent = duration((Date.now() - state.started) / 1000); },1000);
+      try {
+        const result = await api('/api/generar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texto:text,motor:$('engine').value,voz:$('voice').value,velocidad:Number($('speed').value),formato:$('format').value})},1200000);
+        renderResult(result); await loadHistory();
+      } catch (error) { state.error = {key:error.key || 'The connection was interrupted. Check Recent audio before generating again.'}; }
+      finally { clearInterval(timer); state.busy = false; $('settings').disabled = !state.catalog; $('script').readOnly = false; $('progress').hidden = true; $('voice-form').setAttribute('aria-busy','false'); applyLanguage(); }
+    });
+    $('script').addEventListener('input',updateCount); $('speed').addEventListener('input',updateSpeed);
+    $('engine').addEventListener('change',renderVoices); $('voice').addEventListener('change',updateButton);
+    $('retry-catalog').addEventListener('click',loadCatalog); $('refresh').addEventListener('click',loadHistory);
+    $('language-select').addEventListener('change',() => { language = $('language-select').value; try { localStorage.setItem('agenttube_language',language); } catch (_) { /* Still switch without storage. */ } applyLanguage(); });
+    document.addEventListener('play',event => { if (event.target.tagName === 'AUDIO') document.querySelectorAll('audio').forEach(audio => { if (audio !== event.target) audio.pause(); }); },true);
+    window.addEventListener('beforeunload',event => { if (state.busy) { event.preventDefault(); event.returnValue = ''; } });
+    applyLanguage(); loadCatalog(); loadHistory();
+  })();
+  </script>
+</body>
+</html>

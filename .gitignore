@@ -1,0 +1,7 @@
+models/
+salida/
+oauth.env
+*.env
+.env*
+allowed-emails.txt
+__pycache__/
