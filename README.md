@@ -1,103 +1,108 @@
 <div align="center">
 
-# 🎙️ Voz local
+# 🎙️ Local Voice
 
-**Convierte texto en voz en español en tu propio servidor, sin internet, sin cuentas y sin pagar por carácter.**
+**Spanish text-to-speech on your own server — offline, no accounts, and no paying per character.**
 
-Kokoro y Piper · 3 acentos (España, México, Argentina) · 11 voces · panel web y API.
+Kokoro and Piper · 3 accents (Spain, Mexico, Argentina) · 11 voices · web dashboard and API.
 
-[![MIT License](https://img.shields.io/badge/licencia-MIT-blue.svg)](LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB.svg)](requirements.txt)
-[![Docker](https://img.shields.io/badge/docker-listo-2496ED.svg)](docker-compose.yml)
+[![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg)](docker-compose.yml)
 [![Docs](https://img.shields.io/badge/docs-KEIZAC%20TECH-black.svg)](https://keizactech.com/docs)
 
 </div>
 
 ---
 
-## ✨ Qué hace
+## ✨ What it does
 
-- Pegas un texto de hasta **40.000 caracteres**, eliges motor, voz y velocidad, y descargas el **MP3 o WAV**.
-- **Dos motores:**
-  - **Kokoro**: el más natural. Unas 3 veces más rápido que el tiempo real en 2 CPUs.
-  - **Piper**: el más rápido (unas 7 veces el tiempo real) y algo más plano.
-- **Coste por audio: 0.** Todo corre en tu máquina.
-- Limpia marcas de guion como `<break>` o `[slow]` y mete una pausa natural entre párrafos.
-- Panel web adaptado al móvil, con historial, y una API para usarlo desde tus apps.
+- Paste up to **40,000 characters**, pick an engine, voice and speed, and download an **MP3 or WAV**.
+- **Two engines:**
+  - **Kokoro**: the most natural. About 3× faster than real time on 2 CPUs.
+  - **Piper**: the fastest (about 7× real time) and a bit flatter.
+- **Cost per audio file: 0.** Everything runs on your machine.
+- Strips script markers like `<break>` or `[slow]` and adds a natural pause between paragraphs.
+- Mobile-friendly web dashboard with history, plus an API to use it from your own apps.
 
-> Medido en un VPS de 2 CPUs: una narración de **9 minutos** tarda unos **3 min con Kokoro** y **1,3 min con Piper**.
+> Measured on a 2-CPU VPS: a **9-minute** narration takes about **3 min with Kokoro** and **1.3 min with Piper**.
 
-## 🧠 Cómo funciona
+## 🧠 How it works
 
 ```mermaid
 flowchart LR
-    T[Tu texto] --> L[Limpieza<br/>marcas y párrafos]
-    L --> M{Motor}
+    T[Your text] --> L[Cleanup<br/>markers and paragraphs]
+    L --> M{Engine}
     M -->|natural| K[Kokoro ONNX]
-    M -->|rápido| P[Piper]
+    M -->|fast| P[Piper]
     K --> F[FFmpeg → MP3/WAV]
     P --> F
     F --> S[(salida/)]
-    S --> W[Panel web / API]
+    S --> W[Web dashboard / API]
 ```
 
-| Archivo | Qué hace |
+| File | What it does |
 |---|---|
-| `app/motor.py` | Los dos motores, la limpieza del texto y la unión por párrafos |
-| `app/server.py` | API con FastAPI y el panel |
-| `app/index.html` | Panel web (sin frameworks) |
-| `descargar-modelos.sh` | Baja los modelos (~450 MB) una sola vez |
+| `app/motor.py` | Both engines, text cleanup and paragraph joining |
+| `app/server.py` | FastAPI API and the dashboard |
+| `app/index.html` | Web dashboard (no frameworks; UI in Spanish) |
+| `descargar-modelos.sh` | Downloads the models (~450 MB) once |
 
-## 🚀 Arranque rápido
+## 🚀 Quick start
 
 ```bash
 git clone https://github.com/RosaritoRD/voz-local.git
 cd voz-local
-./descargar-modelos.sh        # una sola vez, ~450 MB
+./descargar-modelos.sh        # once, ~450 MB
 docker compose up -d
 ```
 
-Abre **http://localhost:8090**.
+Open **http://localhost:8090**.
 
-¿Quieres entrar desde el móvil? **No abras el puerto tal cual.** Ponle delante un login de Google: [docs/acceso-con-login.md](docs/acceso-con-login.md).
+Want to reach it from your phone? **Don't just open the port.** Put a Google login in front of it: [docs/login-access.md](docs/login-access.md).
 
 ## 🔌 API
 
+The endpoints and fields keep their Spanish names (`voces` = voices, `generar` = generate, `texto` = text, `velocidad` = speed, `historial` = history).
+
 ```bash
-# Voces disponibles
+# Available voices
 curl -s http://localhost:8090/api/voces
 
-# Generar audio
+# Generate audio
 curl -s -X POST http://localhost:8090/api/generar \
   -H "Content-Type: application/json" \
   -d '{"texto":"Señor, en tus manos pongo este día.","motor":"kokoro","voz":"em_alex","velocidad":0.92,"formato":"mp3"}'
-# → devuelve duración, caracteres, segundos de proceso y la url del audio
+# → returns duration, characters, processing seconds and the audio URL
 
-# Historial
+# History
 curl -s http://localhost:8090/api/historial
 ```
 
-Úsalo desde **[Oraflow](https://github.com/RosaritoRD/oraflow)** u otra app para narrar vídeos sin gastar créditos de voz.
+Use it from **[Oraflow](https://github.com/RosaritoRD/oraflow)** or any other app to narrate videos without spending voice credits.
 
-## 🗣️ Voces
+## 🗣️ Voices
 
-| Motor | Voz | Acento |
+| Engine | Voice | Accent |
 |---|---|---|
-| Kokoro | Dora (f), Alex (m), Santa (m) | España |
-| Piper | Claudio (m, alta calidad), Aldo (m) | México |
-| Piper | Daniela (f, alta calidad) | Argentina |
-| Piper | Dave (m), Carlos (m), Sharvard (f), Marta (f), Lucía (f) | España |
+| Kokoro | Dora (f), Alex (m), Santa (m) | Spain |
+| Piper | Claudio (m, high quality), Aldo (m) | Mexico |
+| Piper | Daniela (f, high quality) | Argentina |
+| Piper | Dave (m), Carlos (m), Sharvard (f), Marta (f), Lucía (f) | Spain |
 
-Para añadir más voces de Piper, deja el `.onnx` y su `.onnx.json` en `models/piper/`: aparecen solas en el panel.
+To add more Piper voices, drop the `.onnx` file and its `.onnx.json` into `models/piper/`: they show up in the dashboard automatically.
 
-## 🤖 Con Claude Code o Codex
-Abre la carpeta con `claude` o `codex` y pídele, por ejemplo: *"Añade un motor nuevo"*, *"Haz que el panel permita subir un .txt"* o *"Conecta esta API a mi app"*.
+## 🤖 With Claude Code or Codex
+Open the folder with `claude` or `codex` and ask, for example: *"Add a new engine"*, *"Let the dashboard accept a .txt upload"* or *"Connect this API to my app."*
 
-## 💸 Ahorro y mejoras
-Ver **[AHORRO-Y-MEJORAS.md](AHORRO-Y-MEJORAS.md)**.
+## 💸 Savings and tips
+See **[SAVINGS-AND-TIPS.md](SAVINGS-AND-TIPS.md)**.
 
-## 📚 Más
-📖 Guías y más proyectos: **[keizactech.com/docs](https://keizactech.com/docs)**
+## 🤝 Contributing
+Issues and PRs are welcome — look for the [`good first issue`](https://github.com/RosaritoRD/voz-local/labels/good%20first%20issue) label and read [CONTRIBUTING.md](CONTRIBUTING.md). Questions, voice requests and ideas go in [Discussions](https://github.com/RosaritoRD/voz-local/discussions).
 
-## 📄 Licencia
-Código: MIT. Los modelos tienen sus propias licencias: Kokoro (Apache 2.0) y las voces de Piper (ver la ficha de cada voz en *rhasspy/piper-voices*).
+## 📚 More
+📖 Guides and more projects: **[keizactech.com/docs](https://keizactech.com/docs)**
+
+## 📄 License
+Code: MIT. The models have their own licenses: Kokoro (Apache 2.0) and the Piper voices (see each voice's card in *rhasspy/piper-voices*).

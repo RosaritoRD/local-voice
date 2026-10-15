@@ -1,5 +1,5 @@
-# Voz local: el estudio queda en http://localhost:8090 (solo en tu máquina).
-# Antes: ./descargar-modelos.sh
+# Local Voice: the studio runs at http://localhost:8090 (only on your machine).
+# First run: ./descargar-modelos.sh
 services:
   voz-studio:
     build: .
@@ -7,7 +7,7 @@ services:
     environment:
       VOZ_MODELS: /models
       VOZ_SALIDA: /salida
-      OMP_NUM_THREADS: "2"          # igual al número de CPUs; más hilos solo pelean
+      OMP_NUM_THREADS: "2"          # equal to your CPU count; more threads just fight each other
     volumes:
       - ./models:/models:ro
       - ./salida:/salida
@@ -16,5 +16,5 @@ services:
     mem_limit: 2g
     restart: unless-stopped
 
-# ¿Quieres usarlo desde el móvil o desde fuera? NO abras el puerto tal cual: ponle
-# delante un login. Ejemplo con oauth2-proxy + Google en docs/acceso-con-login.md.
+# Want to use it from your phone or from outside? DON'T just open the port: put a
+# login in front of it. Example with oauth2-proxy + Google in docs/login-access.md.

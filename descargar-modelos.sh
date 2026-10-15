@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Descarga los modelos de voz (≈ 450 MB) en ./models. Se ejecuta una sola vez.
+# Downloads the voice models (≈ 450 MB) into ./models. Run it once.
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p models/piper salida
@@ -9,7 +9,7 @@ for f in kokoro-v1.0.onnx voices-v1.0.bin; do
   [ -f "models/$f" ] || curl -fL --progress-bar -o "models/$f" "$KOKORO/$f"
 done
 
-# Voces de Piper en español (España, México, Argentina). Quita las que no quieras.
+# Spanish Piper voices (Spain, Mexico, Argentina). Remove the ones you don't want.
 PIPER=https://huggingface.co/rhasspy/piper-voices/resolve/main/es
 for v in es_MX-claude-high es_MX-ald-medium es_AR-daniela-high es_ES-davefx-medium \
          es_ES-sharvard-medium es_ES-carlfm-x_low es_ES-mls_9972-low es_ES-mls_10246-low; do
