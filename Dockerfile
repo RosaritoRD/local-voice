@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
-# espeak-ng: fonemizador que Kokoro y Piper usan para español.
-# ffmpeg: convertir a mp3 y medir duración.
+# espeak-ng: the phonemizer Kokoro and Piper use for Spanish.
+# ffmpeg: convert to mp3 and measure duration.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       espeak-ng libespeak-ng1 ffmpeg curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*

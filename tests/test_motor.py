@@ -1,4 +1,4 @@
-"""Tests del motor que no necesitan los modelos (validación y nombres).
+"""Engine tests that don't need the models (validation and names).
 
     python3 -m unittest discover -s tests
 """
@@ -26,19 +26,19 @@ class Limpieza(unittest.TestCase):
 
 class Validacion(unittest.TestCase):
     def test_formato_desconocido_es_un_error(self):
-        with self.assertRaisesRegex(ValueError, "Formato"):
+        with self.assertRaisesRegex(ValueError, "Unknown format"):
             motor.genera("hola", "piper", formato="ogg")
 
     def test_voz_piper_no_puede_salir_de_la_carpeta(self):
-        with self.assertRaisesRegex(ValueError, "Voz desconocida"):
+        with self.assertRaisesRegex(ValueError, "Unknown .* voice"):
             motor.genera("hola", "piper", voz="../piper/es_ES-davefx-medium")
 
     def test_voz_kokoro_desconocida(self):
-        with self.assertRaisesRegex(ValueError, "Voz desconocida"):
+        with self.assertRaisesRegex(ValueError, "Unknown .* voice"):
             motor.genera("hola", "kokoro", voz="xx")
 
     def test_texto_vacio_tras_limpiar(self):
-        with self.assertRaisesRegex(ValueError, "No hay texto"):
+        with self.assertRaisesRegex(ValueError, "no text"):
             motor.genera("<break/> [slow]", "piper")
 
 

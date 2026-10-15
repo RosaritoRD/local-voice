@@ -15,15 +15,15 @@ CATALOG = {
     "ok": True,
     "catalogo": {
         "kokoro": {
-            "etiqueta": "Kokoro (más natural, más lento)",
+            "etiqueta": "Kokoro (more natural, slower)",
             "voces": {
-                "fixture_dora": {"nombre": "Dora", "genero": "femenina", "idioma": "es"},
-                "fixture_alex": {"nombre": "Alex", "genero": "masculina", "idioma": "es"},
+                "fixture_dora": {"nombre": "Dora", "genero": "female", "idioma": "es"},
+                "fixture_alex": {"nombre": "Alex", "genero": "male", "idioma": "es"},
             },
         },
         "piper": {
-            "etiqueta": "Piper (más rápido, algo más plano)",
-            "voces": {"fixture_mx": {"nombre": "Luz", "genero": "femenina", "idioma": "es-MX"}},
+            "etiqueta": "Piper (faster, flatter)",
+            "voces": {"fixture_mx": {"nombre": "Luz", "genero": "female", "idioma": "es-MX"}},
         },
         "empty": {"etiqueta": "No models", "voces": {}},
     },
@@ -131,7 +131,7 @@ def main():
             expect(page.locator("#generate")).to_have_text("Generate voice")
             expect(page.locator("#engine option[value=kokoro]")).to_have_text("Kokoro")
             expect(page.locator("#engine-hint")).to_have_text("Kokoro (more natural, slower)")
-            assert page.evaluate("localStorage.getItem('agenttube_language')") == "en"
+            assert page.evaluate("localStorage.getItem('oraflow_language')") == "en"
             page.locator("#engine").select_option("piper")
             expect(page.locator("#voice")).to_have_value("fixture_mx")
             page.locator("#speed").focus()

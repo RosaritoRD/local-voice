@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#f3f6fa">
-  <title>Estudio de voz · Voz local</title>
+  <title>Voice studio · Voz local</title>
   <style>
     :root { --paper:#f3f6fa; --white:#fff; --ink:#172c3b; --muted:#536574; --blue:#284bbc; --blue-soft:#eaf0ff; --line:#d6dfe7; --mint:#dbede8; --error:#a52e39; --display:'Trebuchet MS',sans-serif; --body:system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'Courier New',monospace; }
     * { box-sizing:border-box; }
@@ -99,38 +99,38 @@
 </head>
 <body>
   <header><div class="shell header-inner">
-    <div class="brand"><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div><strong>Voz local</strong><span data-i18n="Voice studio">Estudio de voz</span></div></div>
-    <div class="language"><label for="language-select" data-i18n="Interface language">Idioma de la interfaz</label><select id="language-select"><option value="es">Español</option><option value="en">English</option></select></div>
+    <div class="brand"><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div><strong>Voz local</strong><span data-i18n="Voice studio">Voice studio</span></div></div>
+    <div class="language"><label for="language-select" data-i18n="Interface language">Interface language</label><select id="language-select"><option value="es">Español</option><option value="en">English</option></select></div>
   </div></header>
   <main class="shell">
-    <div class="intro"><div><h1 data-i18n="Give your script a voice.">Dale voz a tu guion.</h1><p class="muted" data-i18n="Write, listen and find the right pace.">Escribe, escucha y encuentra el ritmo.</p></div><div id="service" class="service" role="status"><span class="dot" aria-hidden="true"></span><span id="service-label">Conectando…</span></div></div>
+    <div class="intro"><div><h1 data-i18n="Give your script a voice.">Give your script a voice.</h1><p class="muted" data-i18n="Write, listen and find the right pace.">Write, listen and find the right pace.</p></div><div id="service" class="service" role="status"><span class="dot" aria-hidden="true"></span><span id="service-label">Connecting…</span></div></div>
     <form id="voice-form">
       <div class="workspace">
-        <div class="script-panel"><div class="panel-heading"><label for="script" data-i18n="Your script">Tu guion</label><span class="tag" data-i18n="TEXT → VOICE">TEXTO → VOZ</span></div>
-          <textarea id="script" name="texto" maxlength="40000" required spellcheck="true" aria-describedby="script-hint character-count" data-placeholder="Paste your script here. Separate paragraphs with a blank line to add a pause." placeholder="Pega aquí tu guion. Separa los párrafos con una línea en blanco para añadir una pausa."></textarea>
-          <div class="script-bottom"><span id="script-hint" data-i18n="A blank line adds a short pause.">Una línea en blanco añade una pausa breve.</span><span id="character-count">0 / 40.000</span></div>
+        <div class="script-panel"><div class="panel-heading"><label for="script" data-i18n="Your script">Your script</label><span class="tag" data-i18n="TEXT → VOICE">TEXT → VOICE</span></div>
+          <textarea id="script" name="texto" maxlength="40000" required spellcheck="true" aria-describedby="script-hint character-count" data-placeholder="Paste your script here. Separate paragraphs with a blank line to add a pause." placeholder="Paste your script here. Separate paragraphs with a blank line to add a pause."></textarea>
+          <div class="script-bottom"><span id="script-hint" data-i18n="A blank line adds a short pause.">A blank line adds a short pause.</span><span id="character-count">0 / 40,000</span></div>
         </div>
-        <fieldset class="settings" id="settings" disabled><legend class="sr-only" data-i18n="Voice settings">Ajustes de voz</legend><h2 aria-hidden="true" data-i18n="Voice settings">Ajustes de voz</h2>
-          <div class="field engine-field"><label for="engine" data-i18n="Engine">Motor</label><select id="engine" name="motor" aria-describedby="engine-hint" required></select><p class="format-note" id="engine-hint"></p></div>
-          <div class="field voice-field"><label for="voice" data-i18n="Voice">Voz</label><select id="voice" name="voz" required></select></div>
-          <div class="field"><div class="range-label"><label for="speed" data-i18n="Speed">Velocidad</label><output id="speed-value" for="speed">0,92×</output></div><input id="speed" type="range" min="0.5" max="1.5" step="0.01" value="0.92"><div class="range-hints"><span>0,5×</span><span>1,5×</span></div></div>
-          <div class="field"><label for="format" data-i18n="Format">Formato</label><select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select><p class="format-note" data-i18n="MP3: smaller. WAV: uncompressed.">MP3: ligero. WAV: sin compresión.</p></div>
-          <button class="generate" id="generate" type="submit" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span id="generate-label" data-i18n="Generate voice">Generar voz</span></button>
+        <fieldset class="settings" id="settings" disabled><legend class="sr-only" data-i18n="Voice settings">Voice settings</legend><h2 aria-hidden="true" data-i18n="Voice settings">Voice settings</h2>
+          <div class="field engine-field"><label for="engine" data-i18n="Engine">Engine</label><select id="engine" name="motor" aria-describedby="engine-hint" required></select><p class="format-note" id="engine-hint"></p></div>
+          <div class="field voice-field"><label for="voice" data-i18n="Voice">Voice</label><select id="voice" name="voz" required></select></div>
+          <div class="field"><div class="range-label"><label for="speed" data-i18n="Speed">Speed</label><output id="speed-value" for="speed">0.92×</output></div><input id="speed" type="range" min="0.5" max="1.5" step="0.01" value="0.92"><div class="range-hints"><span>0.5×</span><span>1.5×</span></div></div>
+          <div class="field"><label for="format" data-i18n="Format">Format</label><select id="format"><option value="mp3">MP3</option><option value="wav">WAV</option></select><p class="format-note" data-i18n="MP3: smaller. WAV: uncompressed.">MP3: smaller. WAV: uncompressed.</p></div>
+          <button class="generate" id="generate" type="submit" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span id="generate-label" data-i18n="Generate voice">Generate voice</span></button>
         </fieldset>
       </div>
     </form>
-    <div class="progress" id="progress" hidden><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div role="status"><strong data-i18n="Generating your audio…">Generando tu audio…</strong><p data-i18n="Long scripts can take several minutes. Keep this page open.">Los guiones largos pueden tardar varios minutos. Mantén esta página abierta.</p></div><span class="elapsed" id="elapsed" aria-label="Tiempo transcurrido">0:00</span></div>
-    <div class="error" id="error-box" role="alert" hidden><p id="error-message"></p><button class="small-button" id="retry-catalog" type="button" data-i18n="Reload voices" hidden>Recargar voces</button><a id="sign-in" href="/oauth2/start?rd=%2F" data-i18n="Sign in again" hidden>Volver a iniciar sesión</a></div>
-    <section class="result" id="result" aria-labelledby="result-title" hidden><div class="section-top"><div><span class="result-kicker" data-i18n="Ready to listen">Listo para escuchar</span><h2 id="result-title" data-i18n="Your audio">Tu audio</h2></div><a class="download" id="download" download data-i18n="Download audio">Descargar audio</a></div><audio id="result-audio" controls preload="metadata" aria-label="Audio generado"></audio><dl class="metadata" id="metadata"></dl></section>
-    <section class="history" aria-labelledby="history-title"><div class="section-top"><div class="history-title"><h2 id="history-title" data-i18n="Recent audio">Audios recientes</h2><span class="history-count" id="history-count">0</span></div><button class="small-button" type="button" id="refresh" data-i18n="Refresh">Actualizar</button></div><p class="empty" id="history-status" role="status">Cargando historial…</p><div id="history-list" class="history-list"></div></section>
+    <div class="progress" id="progress" hidden><div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div role="status"><strong data-i18n="Generating your audio…">Generating your audio…</strong><p data-i18n="Long scripts can take several minutes. Keep this page open.">Long scripts can take several minutes. Keep this page open.</p></div><span class="elapsed" id="elapsed" aria-label="Elapsed time">0:00</span></div>
+    <div class="error" id="error-box" role="alert" hidden><p id="error-message"></p><button class="small-button" id="retry-catalog" type="button" data-i18n="Reload voices" hidden>Reload voices</button><a id="sign-in" href="/oauth2/start?rd=%2F" data-i18n="Sign in again" hidden>Sign in again</a></div>
+    <section class="result" id="result" aria-labelledby="result-title" hidden><div class="section-top"><div><span class="result-kicker" data-i18n="Ready to listen">Ready to listen</span><h2 id="result-title" data-i18n="Your audio">Your audio</h2></div><a class="download" id="download" download data-i18n="Download audio">Download audio</a></div><audio id="result-audio" controls preload="metadata" aria-label="Generated audio"></audio><dl class="metadata" id="metadata"></dl></section>
+    <section class="history" aria-labelledby="history-title"><div class="section-top"><div class="history-title"><h2 id="history-title" data-i18n="Recent audio">Recent audio</h2><span class="history-count" id="history-count">0</span></div><button class="small-button" type="button" id="refresh" data-i18n="Refresh">Refresh</button></div><p class="empty" id="history-status" role="status">Loading history…</p><div id="history-list" class="history-list"></div></section>
   </main>
-  <footer class="notice" data-i18n="Local voice — no ElevenLabs credits used">Voz local — no gasta créditos de ElevenLabs</footer>
+  <footer class="notice" data-i18n="Local voice — no ElevenLabs credits used">Local voice — no ElevenLabs credits used</footer>
   <noscript><p class="error">Activa JavaScript para generar y escuchar voces. Enable JavaScript to use the voice studio.</p></noscript>
   <script>
   (() => {
     'use strict';
-    // Same convention as AgentTube: English UI keys, ES/EN catalogue and a
-    // persisted agenttube_language. Script text and API data stay opaque.
+    // Same convention as Oraflow: English UI keys, ES/EN catalogue and a
+    // persisted oraflow_language. Script text and API data stay opaque.
     const entries = {
       'Voice studio':'Estudio de voz', 'Interface language':'Idioma de la interfaz',
       'Give your script a voice.':'Dale voz a tu guion.', 'Write, listen and find the right pace.':'Escribe, escucha y encuentra el ritmo.',
@@ -154,11 +154,13 @@
       'Enter a script of up to 40,000 characters.':'Escribe un guion de hasta 40.000 caracteres.',
       'No voices installed':'No hay voces instaladas', 'Duration':'Duración', 'Characters':'Caracteres', 'Processing time':'Tiempo de proceso',
       'Generated audio':'Audio generado', 'Elapsed time':'Tiempo transcurrido', 'Female':'Femenina', 'Male':'Masculina',
-      'Kokoro (more natural, slower)':'Kokoro (más natural, más lento)', 'Piper (faster, flatter)':'Piper (más rápido, algo más plano)'
+      'Kokoro (more natural, slower)':'Kokoro (más natural, más lento)', 'Piper (faster, flatter)':'Piper (más rápido, algo más plano)',
+      'Spain':'España', 'Mexico':'México'
     };
     const $ = id => document.getElementById(id);
-    let language = 'es';
-    try { const saved = localStorage.getItem('agenttube_language'); if (['es','en'].includes(saved)) language = saved; } catch (_) { /* Storage is optional. */ }
+    // No saved choice yet: follow the browser (Spanish browsers get Spanish).
+    let language = /^es\b/i.test(navigator.language || '') ? 'es' : 'en';
+    try { const saved = localStorage.getItem('oraflow_language'); if (['es','en'].includes(saved)) language = saved; } catch (_) { /* Storage is optional. */ }
     const state = { catalog:null, busy:false, history:[], historyStatus:'Loading history…', error:null, started:0, result:null };
     const t = key => language === 'es' ? (entries[key] || key) : key;
     const number = value => new Intl.NumberFormat(language === 'es' ? 'es-ES' : 'en-US').format(value);
@@ -171,7 +173,7 @@
     }
     function updateButton() { $('generate').disabled = state.busy || !state.catalog || !$('voice').value || !$('script').value.trim(); }
     function engineLabel(label) {
-      const source = Object.keys(entries).find(key => entries[key] === label);
+      const source = Object.hasOwn(entries, label) ? label : Object.keys(entries).find(key => entries[key] === label);
       return source ? t(source) : label;
     }
     function renderEngines() {
@@ -192,8 +194,8 @@
       const voices = state.catalog?.[$('engine').value]?.voces || {};
       for (const [id, voice] of Object.entries(voices)) {
         const option = document.createElement('option'); option.value = id;
-        const gender = voice.genero === 'femenina' ? t('Female') : voice.genero === 'masculina' ? t('Male') : voice.genero;
-        option.textContent = [voice.nombre || id, gender, voice.idioma].filter(Boolean).join(' · '); $('voice').append(option);
+        const gender = ['female','femenina'].includes(voice.genero) ? t('Female') : ['male','masculina'].includes(voice.genero) ? t('Male') : voice.genero;
+        option.textContent = [voice.nombre || id, gender, voice.idioma && t(voice.idioma)].filter(Boolean).join(' · '); $('voice').append(option);
       }
       if (Object.hasOwn(voices, chosen)) $('voice').value = chosen;
       if (!$('voice').options.length) { const option = document.createElement('option'); option.value = ''; option.textContent = t('No voices installed'); $('voice').append(option); }
@@ -295,7 +297,7 @@
     $('script').addEventListener('input',updateCount); $('speed').addEventListener('input',updateSpeed);
     $('engine').addEventListener('change',renderVoices); $('voice').addEventListener('change',updateButton);
     $('retry-catalog').addEventListener('click',loadCatalog); $('refresh').addEventListener('click',loadHistory);
-    $('language-select').addEventListener('change',() => { language = $('language-select').value; try { localStorage.setItem('agenttube_language',language); } catch (_) { /* Still switch without storage. */ } applyLanguage(); });
+    $('language-select').addEventListener('change',() => { language = $('language-select').value; try { localStorage.setItem('oraflow_language',language); } catch (_) { /* Still switch without storage. */ } applyLanguage(); });
     document.addEventListener('play',event => { if (event.target.tagName === 'AUDIO') document.querySelectorAll('audio').forEach(audio => { if (audio !== event.target) audio.pause(); }); },true);
     window.addEventListener('beforeunload',event => { if (state.busy) { event.preventDefault(); event.returnValue = ''; } });
     applyLanguage(); loadCatalog(); loadHistory();
