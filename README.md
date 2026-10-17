@@ -51,7 +51,7 @@ flowchart LR
 ## 🚀 Quick start
 
 ```bash
-git clone https://github.com/RosaritoRD/voz-local.git
+git clone https://github.com/RosaritoRD/local-voice.git
 cd voz-local
 ./descargar-modelos.sh        # once, ~450 MB
 docker compose up -d
@@ -99,7 +99,7 @@ Open the folder with `claude` or `codex` and ask, for example: *"Add a new engin
 See **[SAVINGS-AND-TIPS.md](SAVINGS-AND-TIPS.md)**.
 
 ## 🤝 Contributing
-Issues and PRs are welcome — look for the [`good first issue`](https://github.com/RosaritoRD/voz-local/labels/good%20first%20issue) label and read [CONTRIBUTING.md](CONTRIBUTING.md). Questions, voice requests and ideas go in [Discussions](https://github.com/RosaritoRD/voz-local/discussions).
+Issues and PRs are welcome — look for the [`good first issue`](https://github.com/RosaritoRD/local-voice/labels/good%20first%20issue) label and read [CONTRIBUTING.md](CONTRIBUTING.md). Questions, voice requests and ideas go in [Discussions](https://github.com/RosaritoRD/local-voice/discussions).
 
 ## 📚 More
 📖 Guides and more projects: **[keizactech.com/docs](https://keizactech.com/docs)**
